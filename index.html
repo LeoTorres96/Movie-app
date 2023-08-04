@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie App</title>
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <form>
+      <h1 id="title">Submit your movie ratings!</h1>
+      <input id="movie-name" type="text" />
+      <input id="movie-rating" type="number" />
+      <button id="submit" type="submit">Submit</button>
+      <ul></ul>
+    </form>
+
+    <script>
+      // Limiting the rating to only reach up to 10.
+      $('input[type=number]').on('mouseup keyup input', function () {
+        $(this).val(Math.min(10, Math.max($(this).val())));
+      });
+      // Movie must have more than 2 characteristics in order to enable the submit button.
+      $(function () {
+        const minLength = 2;
+        $('input[type=text]').on('input', function () {
+          if ($(this).val().length >= 2) {
+            $('button[type=submit]').prop('disabled', false);
+          } else {
+            $('button[type=submit]').prop('disabled', true);
+          }
+        });
+      });
+      // Movie and ratings are submitted, also both fields clear out once submited. Adding a remove button that comes with the created li's to remove from the list.
+      $('form').on('submit', function (event) {
+        event.preventDefault();
+        const movieName = $('#movie-name').val();
+        const movieRating = $('#movie-rating').val();
+        const li = $('<li></li>').text(movieName + ': ' + movieRating);
+        const removeButton = $('<button>Remove</button>');
+        removeButton.on('click', function () {
+          li.remove();
+        });
+        li.append(removeButton);
+        $('ul').append(li);
+        $('#movie-name').val('');
+        $('#movie-rating').val('');
+      });
+    </script>
+  </body>
+</html>
